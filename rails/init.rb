@@ -1,0 +1,1 @@
+require '../lib/search_alternative'
