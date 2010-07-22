@@ -1,13 +1,30 @@
 SearchAlternative
 =================
 
-Introduction goes here.
-
+This plugin has been created since searchlogic did not appeared on time when rails 3 appeared in beta.
+It is supposed to help with table sorting and simple search filters.
 
 Example
 =======
 
-Example goes here.
+Controller:
+
+  def index
+    options = {}
+    options[:page] = params[:page]
+    options[:per_page] = 10
+
+    @search = User.search(params)
+    @users = @search.paginate(options)
+  end
+
+View:
+
+  <%= form_tag users_path, :method => :get do %>
+    <%= search_tag 'username' %>
+    <%= search_tag 'email' %>
+    <%= submit_tag 'Search' %>
+  <% end %>
 
 
 Copyright (c) 2010 [Mariusz Wyrozębski], released under the MIT license
