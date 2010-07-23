@@ -36,6 +36,12 @@ module SearchAlternativeHelpers
       if page_params[:search][:with]
         url_options[:search][:with] = page_params[:search][:with] 
       end
+      if page_params[:search][:role_name]
+        url_options[:search][:role_name] = page_params[:search][:role_name]
+      end
+      if page_params[:search][:role_object]
+        url_options[:search][:role_object] = page_params[:search][:role_object]
+      end
     end
 
     options[:as] = raw(options[:as]) if defined?(RailsXss)

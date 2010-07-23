@@ -24,6 +24,7 @@ module SearchMethods
         result += " and #{key} like '%#{value}%'"
       end
     end
+
     where(result)
   end
 
