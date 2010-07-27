@@ -20,11 +20,34 @@ Controller:
 
 View:
 
+Simple searching form, that will use table column
+
   <%= form_tag users_path, :method => :get do %>
     <%= search_tag 'username' %>
     <%= search_tag 'email' %>
     <%= submit_tag 'Search' %>
   <% end %>
 
+Some additional filtering outside of form.
+
+<%= filter 'fancy_scope', :as => 'Show only those with fancy feature' %>
+
+This helper will produce link that will attach some search parametres. It will call on your model scope named filter_by_fancy_scope
+
+class User
+  scope :filter_by_fancy_feature, { where("fancy") }
+end
+
+You can pass additional parameter in :filter_params.
+
+<%= filter 'fancy_scope', :as => 'Show only those with fancy feature', :filter_params => 34 %>
+<%= filter 'fancy_scope', :as => 'Show only those with fancy feature', :filter_params => 'fancy_argument' %>
+<%= filter 'fancy_scope', :as => 'Show only those with fancy feature', :filter_params => [15,67,89] %>
+
+You will need of course named scope that will know what to do with this param. As example:
+
+class User
+  scope :filter_by_fancy_feature, lambda {|param| where("fancy = ?",param) }
+end
 
 Copyright (c) 2010 [Mariusz Wyrozębski], released under the MIT license
