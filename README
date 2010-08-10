@@ -50,4 +50,11 @@ class User
   scope :filter_by_fancy_feature, lambda {|param| where("fancy = ?",param) }
 end
 
+Ordering
+
+search_alternative supports ordering with following approach:
+
+<%= order @search, :by => 'username', :as => I18n.t('activerecord.attributes.user.username') %>
+
+
 Copyright (c) 2010 [Mariusz Wyrozębski], released under the MIT license
