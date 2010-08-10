@@ -83,6 +83,9 @@ module SearchAlternativeHelpers
       if page_params[:search][:filter_params]
         url_options[:search][:filter_params] = page_params[:search][:filter_params]
       end
+      if page_params[:search][:search_filters] and !page_params[:search][:search_filters].empty?
+          url_options[:search][:search_filters] = page_params[:search][:search_filters]
+      end
 #      if page_params[:search][:by_scope]
 #        url_options[:search][:by_scope] = page_params[:search][:by_scope]
 #      end
@@ -122,10 +125,14 @@ module SearchAlternativeHelpers
       if page_params[:search][:scope_direction]
         url_options[:search][:scope_direction] = page_params[:search][:scope_direction]
       end
+      if page_params[:search][:search_filters] and !page_params[:search][:search_filters].empty?
+          url_options[:search][:search_filters] = page_params[:search][:search_filters]
+      end
     end
 
     link_to options[:as], url_for(url_options), html_options
   end
+
 
   def search_tag(search_by_field, options = params)
     value = ''
@@ -134,7 +141,38 @@ module SearchAlternativeHelpers
         value = options[:search][:with][search_by_field.to_sym]
       end
     end
-    text_field_tag "search[with][#{search_by_field}]", value.to_s
+    text_field_tag "search[with][#{search_by_field}]", value.to_s, options
+  end
+
+  def search_filter(search_by_field, html_options = {}, page_params = params)
+    value = ''
+    if page_params[:search] && page_params[:search][:search_filters]
+      if page_params[:search][:search_filters][search_by_field.to_sym]
+        value = page_params[:search][:search_filters][search_by_field.to_sym]
+      end
+    end
+
+    text_field_tag "search[search_filters][#{search_by_field}]", value.to_s, html_options
+  end
+
+  # for now only one value is supproted, so multiple select willl fail
+  def search_filter_collection_select_tag(search_by_field, collection, id_method, value_method, html_options = {}, page_params = params)
+
+    selected_value = ''
+    if page_params[:search] && page_params[:search][:search_filters]
+      if page_params[:search][:search_filters][search_by_field.to_sym]
+        selected_value = page_params[:search][:search_filters][search_by_field.to_sym]
+      end
+    end
+
+    options = collection.map do |member| [member.send(id_method.to_sym),member.send(value_method.to_sym)] end
+    options_arr = options.map do |key,value| value.to_s == selected_value ? "<option selected=\"selected\" value=\"#{value}\">#{key}</option>" : "<option value=\"#{value}\">#{key}</option>" end
+
+
+    safe_options_for_select = options_arr.join
+
+#    text_field_tag "search[search_filters][#{search_by_field}]", value.to_s, html_options
+    select_tag "search[search_filters][#{search_by_field}]", safe_options_for_select.html_safe, html_options
   end
 
 end

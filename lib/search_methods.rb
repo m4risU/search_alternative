@@ -7,7 +7,7 @@ module SearchMethods
       @search_by = params[:search] ? params[:search][:with] : nil
       #search_by = params && params[:search] ? params[:search][:by] : nil
 
-      build_where(@search_by).build_order(search_ordering, ordering_by(@search_ordering)).use_search_scope(params[:search]).use_search_filter_scope(params[:search])
+      build_where(@search_by).build_order(search_ordering, ordering_by(@search_ordering)).use_search_scope(params[:search]).use_search_filter_scope(params[:search]).use_search_filters(params[:search][:search_filters])
     else
       where("true")
     end
@@ -24,6 +24,21 @@ module SearchMethods
   def use_search_filter_scope(search)
     if search[:filter]
       send("filter_by_#{search[:filter]}".to_sym, search[:filter_params] ? search[:filter_params] : nil)
+    else
+      where("true")
+    end
+  end
+
+  def use_search_filters(search_hash)
+    searches = search_hash.clone if search_hash
+
+    if searches && !searches.empty?
+      key, value = searches.shift
+      anonymous_filter =
+              lambda {
+                send("filter_by_#{key}".to_sym, value).use_search_filters(searches)
+              }
+      anonymous_filter.call
     else
       where("true")
     end
