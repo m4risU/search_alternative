@@ -1,6 +1,7 @@
 require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
+require 'echoe'
 
 desc 'Default: run unit tests.'
 task :default => :test
@@ -20,4 +21,13 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.options << '--line-numbers' << '--inline-source'
   rdoc.rdoc_files.include('README')
   rdoc.rdoc_files.include('lib/**/*.rb')
+end
+
+Echoe.new('search_alternative', '0.2.2') do |p|
+  p.description    = "A gem that makes the search work for you"
+  p.url            = "http://github.com/m4risU/search_alternative"
+  p.author         = "Mariusz Wyrozebski"
+  p.email          = "mariuszwyrozebski@gmail.com"
+  p.ignore_pattern = ["tmp/*", "script/*"]
+  p.development_dependencies = []
 end
