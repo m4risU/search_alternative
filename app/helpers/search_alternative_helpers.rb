@@ -1,8 +1,21 @@
+# Helper module
+# Whole idea goes around using params[:search] in many different ways to get ordering and filtering in application
+# Different parameters work differently
+# Within :search
+#   :ascend_scope
+#   :descend_scope
+# Idea for those two is inherited from Searchlogic gem. 
 module SearchAlternativeHelpers
+
+  # This helper creates link in table that does sorting by given column in table
+  # In addition when link is used to sort the data, then it will get additional class 'ascending'  or 'descending'
+  # depending on sort direction
+  # Helper accepts params
+  # :as => label you want to see, especially something from I18n
   def order(search, options = params[:search], html_options = {}, page = params[:page], page_params = params)
 
     url_options = {
-                          :search => {}
+            :search => {}
     }
 
     if options && options[:by]
@@ -40,7 +53,6 @@ module SearchAlternativeHelpers
 
     if options && options[:by_scope]
       url_options[:search][:by_scope] = options[:by_scope]
-
 
       if page_params[:search] && page_params[:search][:by_scope] == options[:by_scope]
 
@@ -84,7 +96,7 @@ module SearchAlternativeHelpers
         url_options[:search][:filter_params] = page_params[:search][:filter_params]
       end
       if page_params[:search][:search_filters] and !page_params[:search][:search_filters].empty?
-          url_options[:search][:search_filters] = page_params[:search][:search_filters]
+        url_options[:search][:search_filters] = page_params[:search][:search_filters]
       end
 #      if page_params[:search][:by_scope]
 #        url_options[:search][:by_scope] = page_params[:search][:by_scope]
@@ -101,7 +113,7 @@ module SearchAlternativeHelpers
 
   def filter(filter_scope, options = params[:search], html_options = {}, page_params = params)
     url_options = {
-                          :search => {}
+            :search => {}
     }
     if filter_scope
       url_options[:search][:filter] = filter_scope
@@ -126,7 +138,7 @@ module SearchAlternativeHelpers
         url_options[:search][:scope_direction] = page_params[:search][:scope_direction]
       end
       if page_params[:search][:search_filters] and !page_params[:search][:search_filters].empty?
-          url_options[:search][:search_filters] = page_params[:search][:search_filters]
+        url_options[:search][:search_filters] = page_params[:search][:search_filters]
       end
     end
 
@@ -165,8 +177,12 @@ module SearchAlternativeHelpers
       end
     end
 
-    options = collection.map do |member| [member.send(id_method.to_sym),member.send(value_method.to_sym)] end
-    options_arr = options.map do |key,value| value.to_s == selected_value ? "<option selected=\"selected\" value=\"#{value}\">#{key}</option>" : "<option value=\"#{value}\">#{key}</option>" end
+    options = collection.map do |member|
+      [member.send(id_method.to_sym), member.send(value_method.to_sym)]
+    end
+    options_arr = options.map do |key, value|
+      value.to_s == selected_value ? "<option selected=\"selected\" value=\"#{value}\">#{key}</option>" : "<option value=\"#{value}\">#{key}</option>"
+    end
 
 
     safe_options_for_select = options_arr.join
