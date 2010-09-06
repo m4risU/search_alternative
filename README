@@ -35,7 +35,7 @@ Some additional filtering outside of form.
 This helper will produce link that will attach some search parametres. It will call on your model scope named filter_by_fancy_scope
 
 class User
-  scope :filter_by_fancy_feature, { where("fancy") }
+  scope :filter_by_fancy_scope, { where("fancy") }
 end
 
 You can pass additional parameter in :filter_params.

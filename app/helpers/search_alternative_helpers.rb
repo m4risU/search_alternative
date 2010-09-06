@@ -146,14 +146,14 @@ module SearchAlternativeHelpers
   end
 
 
-  def search_tag(search_by_field, options = params)
+  def search_tag(search_by_field, html_options = {}, options = params)
     value = ''
     if options[:search]
       if options[:search][:with]
         value = options[:search][:with][search_by_field.to_sym]
       end
     end
-    text_field_tag "search[with][#{search_by_field}]", value.to_s, options
+    text_field_tag "search[with][#{search_by_field}]", value.to_s, html_options
   end
 
   def search_filter(search_by_field, html_options = {}, page_params = params)
